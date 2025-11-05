@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crop Disease Expert System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #d4fc79, #96e6a1);
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #2c3e50;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    select, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+    select {
+      background-color: #fff;
+      width: 220px;
+    }
+    button {
+      background-color: #27ae60;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #219150;
+    }
+    #result {
+      margin-top: 25px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      width: 450px;
+      display: inline-block;
+      box-shadow: 0px 3px 8px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+    .loader {
+      display: none;
+      margin: 20px auto;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #27ae60;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌾 Crop Disease Expert System</h1>
+  <p>Select your crop and main symptom:</p>
+
+  <select id="crop">
+    <option value="">-- Select Crop --</option>
+    <option value="rice">Rice</option>
+    <option value="wheat">Wheat</option>
+    <option value="maize">Maize</option>
+  </select>
+
+  <select id="symptom">
+    <option value="">-- Select Symptom --</option>
+    <option value="yellow">Yellow Leaves</option>
+    <option value="brown">Brown Spots</option>
+    <option value="mold">White Mold</option>
+    <option value="rust">Rusty Patches</option>
+    <option value="blight">Blight</option>
+  </select>
+
+  <br>
+  <button onclick="diagnose()">Diagnose Disease</button>
+
+  <div class="loader" id="loader"></div>
+  <div id="result"></div>
+
+  <script>
+    function diagnose() {
+      const crop = document.getElementById("crop").value;
+      const symptom = document.getElementById("symptom").value;
+      const result = document.getElementById("result");
+      const loader = document.getElementById("loader");
+      result.innerHTML = "";
+      if (!crop || !symptom) {
+        alert("Please select both crop and symptom!");
+        return;
+      }
+
+      loader.style.display = "block";
+
+      setTimeout(() => {
+        loader.style.display = "none";
+        let diagnosis = "";
+        let suggestion = "";
+        let fertilizer = "";
+
+        if (crop === "rice") {
+          if (symptom === "yellow") {
+            diagnosis = "Bacterial Leaf Blight";
+            suggestion = "Use copper-based fungicides and avoid water stagnation.";
+            fertilizer = "Apply nitrogen fertilizer moderately.";
+          } else if (symptom === "brown") {
+            diagnosis = "Brown Spot Disease";
+            suggestion = "Spray Mancozeb 0.25% and ensure good drainage.";
+            fertilizer = "Use potash-rich fertilizer.";
+          } else if (symptom === "mold") {
+            diagnosis = "Sheath Blight";
+            suggestion = "Use validamycin and avoid dense planting.";
+            fertilizer = "Balanced NPK fertilizer recommended.";
+          }
+        } else if (crop === "wheat") {
+          if (symptom === "rust") {
+            diagnosis = "Leaf Rust";
+            suggestion = "Spray propiconazole and grow resistant varieties.";
+            fertilizer = "Apply urea and phosphate fertilizers.";
+          } else if (symptom === "blight") {
+            diagnosis = "Leaf Blight";
+            suggestion = "Use foliar fungicide sprays and remove infected leaves.";
+            fertilizer = "Add nitrogen and potash fertilizer.";
+          }
+        } else if (crop === "maize") {
+          if (symptom === "yellow") {
+            diagnosis = "Maize Dwarf Mosaic Virus (MDMV)";
+            suggestion = "Control aphids and use virus-free seeds.";
+            fertilizer = "Apply zinc and nitrogen-based fertilizers.";
+          } else if (symptom === "mold") {
+            diagnosis = "Downy Mildew";
+            suggestion = "Use metalaxyl and ensure crop rotation.";
+            fertilizer = "Use nitrogen and phosphorous fertilizer.";
+          }
+        }
+
+        if (diagnosis === "") {
+          result.innerHTML = "<b>No matching disease found. Try another combination.</b>";
+          return;
+        }
+
+        let confidence = Math.floor(Math.random() * 26) + 70; // Random 70–95%
+
+        result.innerHTML = `
+          <b>✅ Disease:</b> ${diagnosis}<br>
+          <b>💊 Suggestion:</b> ${suggestion}<br>
+          <b>🌱 Fertilizer:</b> ${fertilizer}<br>
+          <b>🤖 Confidence:</b> ${confidence}%
+        `;
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
